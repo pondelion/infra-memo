@@ -1,0 +1,18 @@
+version: '3'
+services:
+  minio:
+    image: minio/minio:latest
+    container_name: 'minio'
+    ports:
+      - 9000:9999
+      - 9001:9001
+    env_file:
+      - .env
+    tty: true
+    entrypoint: sh
+    command: -c "mkdir -p /data/.minio.sys/buckets; cp -r /policies/* /data/.minio.sys/; cp -r /init_data/* /data/; /opt/bin/minio server /data --address :9999 --console-address :9001;"
+    volumes:
+      - ./docker/minio/data:/data
+      - ./docker/minio/init_data:/init_data
+      - ./docker/minio/config:/root/.minio
+      - ./docker/minio/policies:/policies

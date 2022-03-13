@@ -1,0 +1,23 @@
+<source>
+  @type forward
+  port 24224
+</source>
+<match s3.**>
+  @type s3
+  aws_key_id ***
+  aws_sec_key ****
+  path logs/
+  buffer_path /fluentd/log/s3
+  s3_bucket fluentd-test-20220313
+  s3_region ap-northeast-1
+  time_slice_format %Y%m%d%H
+  time_slice_wait 10m
+
+  buffer_chunk_limit 256m
+  # <buffer>
+  #   flush_mode immediate  # 即時ファイル書き込み
+  #   # flush_mode interval  # 特定時間間隔ファイル書き込み
+  #   # flush_mode lazy
+  #   # flush_interval 60s
+  # </buffer>
+</match>

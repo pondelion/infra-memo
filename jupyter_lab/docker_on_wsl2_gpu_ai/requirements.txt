@@ -1,0 +1,13 @@
+pandas
+numpy
+opencv-python
+jupyterlab
+jupyterlab_code_formatter
+jupyterlab_widgets
+ipywidgets
+scikit-learn
+matplotlib
+japanize_matplotlib
+seaborn
+plotly
+tqdm

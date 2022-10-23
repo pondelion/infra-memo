@@ -1,0 +1,43 @@
+version: "3"
+services:
+  kafka_zookeeper:
+    image: confluentinc/cp-zookeeper:5.5.1
+    hostname: kafka_zookeeper
+    container_name: kafka_zookeeper
+    ports:
+      - "32181:32181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 32181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka_broker:
+    image: confluentinc/cp-kafka:5.5.1
+    hostname: kafka_broker
+    container_name: kafka_broker
+    depends_on:
+      - kafka_zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: "kafka_zookeeper:32181"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka_broker:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      CONFLUENT_SUPPORT_METRICS_ENABLE: "false"
+
+  kafka_cli:
+    image: confluentinc/cp-kafka:5.5.1
+    hostname: kafka_cli
+    container_name: kafka_cli
+    depends_on:
+      - kafka_broker
+    entrypoint: /bin/sh
+    tty: true
+
+networks:
+  default:
+    external:
+      name: kafka_network

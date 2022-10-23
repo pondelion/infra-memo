@@ -1,0 +1,22 @@
+version: "2.4"
+services:
+  jupyter_lab_ai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # restart: always
+    entrypoint: >
+      jupyter-lab
+      --allow-root
+      --ip=0.0.0.0
+      --port=8888
+      --no-browser
+      --NotebookApp.token=''
+      --notebook-dir=/workspace
+    expose:
+      - "8888"
+    ports:
+      - "127.0.0.1:8888:8888"
+    volumes:
+      - ./workspace:/workspace
+    runtime: nvidia
